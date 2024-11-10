@@ -19,7 +19,25 @@ const createPost = async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
     }
 }
-
+const deletePost = async (req, res) => {
+    
+    try {
+        const id = req.params.id;
+        if (!id ) {
+            return res.status(400).json({message:"id is required"})
+        }
+        const response = await pool.query(
+            `DELETE FROM Posts WHERE id = ?`,
+            [id]
+        )
+        res.status(201).json('post deleted successfully')
+    }
+    catch (error) {
+        console.log(error);
+    return res.status(500).json({ message: "internal server error" });
+    }
+}
 module.exports = {
     createPost,
+    deletePost,
 }
