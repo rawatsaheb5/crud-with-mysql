@@ -37,7 +37,28 @@ const deletePost = async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
     }
 }
+const updatePost = async (req, res) => {
+    
+    try {
+        const id = req.params.id;
+        
+        const { image } = req.body;
+        if (!id || !image ) {
+            return res.status(400).json({message:"id is required"})
+        }
+        const response = await pool.query(
+            `UPDATE Posts SET image = ? WHERE id = ?`,
+            [image, id]
+        )
+        res.status(201).json('post updated successfully')
+    }
+    catch (error) {
+        console.log(error);
+    return res.status(500).json({ message: "internal server error" });
+    }
+}
 module.exports = {
     createPost,
     deletePost,
+    updatePost,
 }
