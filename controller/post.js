@@ -57,8 +57,30 @@ const updatePost = async (req, res) => {
     return res.status(500).json({ message: "internal server error" });
     }
 }
+
+const getAllPostOfTheUser = async (req, res) => {
+    
+    try {
+        const userId = req.params.userId
+        
+       
+        if (!userId  ) {
+            return res.status(400).json({message:"userId is required"})
+        }
+        const response = await pool.query(
+            `SELECT id , title, description, image FROM Posts where userId = ?`,
+            [userId]
+        )
+        res.status(201).json({message:'post fetched successfully',data:response[0]})
+    }
+    catch (error) {
+        console.log(error);
+    return res.status(500).json({ message: "internal server error" });
+    }
+}
 module.exports = {
     createPost,
     deletePost,
     updatePost,
+    getAllPostOfTheUser,
 }
